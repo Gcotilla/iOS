@@ -6,5 +6,5 @@ cache:
 before_install:
   - brew install phantomjs
 script:
-  - ./run_content_blocking_tests.sh
+  - ./run_js_tests.sh
   - ./run_tests.sh

@@ -1,19 +1,25 @@
 
-# Content Blocking Tests
+# JS Tests
+
+## Introduction
+
+This folder contains tests that exercise the JavaScript layer used by this app.
 
 ## Pre-requisits
 
-* PhantomJS 2.1.1 or greater
+* PhantomJS 2.1.1 or greater 
+
+Running `brew install phantomjs` should get you an appropriate version.
 
 
 ## Execution
 
-See `../run_content_blocking_tests.sh`
+See `../run_js_tests.sh`
 
 
 ## Explaination
 
-`content_blocking_test_harness.html` bootstraps all the required scripts and then executes a series of tests using a light weight, hand made testing framework
+`content_blocking_test_harness.html` bootstraps all the required scripts and then executes a series of tests using a light weight, hand made testing framework.
 
 `mock*.js` provide minmial mocks of the dependencies that `contentblocker.js` has in order to operate.  Unit tests should be able to configure these to various test paths through the code.
 

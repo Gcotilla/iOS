@@ -56,6 +56,7 @@ var duckduckgoContentBlocking = function() {
 		try {
 			return new URL(url.startsWith("//") ? protocol + url : url)
 		} catch(error) {
+			console.log(error)
 			return null
 		}
 	}

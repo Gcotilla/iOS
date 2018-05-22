@@ -1,12 +1,19 @@
 
-var testPasses = []
-var testFailures = []
+var testResults = []
 var tests = []
 
 function assertTrue(isTrue) {
 
-    if (!isTrue) {
+    if (isTrue !== true) {
         throw Error("expected true")
+    }
+
+}
+
+function assertFalse(isFalse) {
+
+    if (isFalse !== false) {
+        throw Error("expected false")
     }
 
 }
@@ -24,13 +31,11 @@ function test(name, func) {
 }
 
 function runTest(name, func) {
-    var pass = true
     try {
         func()
-        testPasses.push(name)
+        testResults.push({"name": name, "error": null})
     } catch(error) {
-        testFailures.push({"name": name, "error": error})
-        pass = false
+        testResults.push({"name": name, "error": error})
     }
 }
 

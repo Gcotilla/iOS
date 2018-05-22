@@ -34,10 +34,6 @@ class SettingsViewController: UITableViewController {
     fileprivate lazy var privacyStore = PrivacyUserDefaults()
     fileprivate lazy var appSettings: AppSettings = AppUserDefaults()
     
-    private struct TableIndex {
-        static let sendFeedback = IndexPath(item: 1, section: 2)
-    }
-    
     static func loadFromStoryboard() -> UIViewController {
         return UIStoryboard(name: "Settings", bundle: nil).instantiateInitialViewController()!
     }
@@ -70,9 +66,6 @@ class SettingsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath == TableIndex.sendFeedback {
-            sendFeedback()
-        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -88,19 +81,8 @@ class SettingsViewController: UITableViewController {
         }
     }
     
-    private func sendFeedback() {
-        let appVersion = versionProvider.localized
-        let device = UIDevice.current.deviceType.displayName
-        let osName = UIDevice.current.systemName
-        let osVersion = UIDevice.current.systemVersion
-        
-        let feedback = FeedbackEmail(appVersion: appVersion, device: device, osName: osName, osVersion: osVersion)
-        guard let mail = MFMailComposeViewController.create() else { return }
-        mail.mailComposeDelegate = self
-        mail.setToRecipients([feedback.mailTo])
-        mail.setSubject(feedback.subject)
-        mail.setMessageBody(feedback.body, isHTML: false)
-        present(mail, animated: true, completion: nil)
+    @IBAction func sendFeedback() {
+        UIApplication.shared.openURL(AppDeepLinks.feedbackLink)
     }
     
     @IBAction func onAuthenticationToggled(_ sender: UISwitch) {

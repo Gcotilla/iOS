@@ -419,7 +419,6 @@ extension TabViewController: WKScriptMessageHandler {
 extension TabViewController: WebEventsDelegate {
     
     func attached(webView: WKWebView) {
-        webView.scrollView.delegate = self
         webView.configuration.userContentController.add(self, name: MessageHandlerNames.trackerDetected)
         webView.configuration.userContentController.add(self, name: MessageHandlerNames.cache)
         webView.configuration.userContentController.add(self, name: MessageHandlerNames.log)
@@ -445,7 +444,7 @@ extension TabViewController: WebEventsDelegate {
             self.siteRating = SiteRating(url: siteRating.url, httpsForced: httpsForced, protectionId: siteRating.protectionId)
         } else {
             resetSiteRating()
-            reloadScripts(with: siteRating!.protectionId, restrictedDevice: UIDevice.current.isSlow())
+            reloadScripts(with: siteRating!.protectionId)
         }
         
         tabModel.link = link
@@ -543,16 +542,6 @@ extension TabViewController {
     }
 }
 
-extension TabViewController: UIScrollViewDelegate {
-    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-        if chromeDelegate?.isToolbarHidden == true {
-            showBars()
-            return false
-        }
-        return true
-    }
-}
-
 extension TabViewController: ContentBlockerSettingsChangeDelegate {
     func contentBlockerSettingsDidChange() {
         onContentBlockerConfigurationChanged()
@@ -565,38 +554,5 @@ extension TabViewController: PrivacyProtectionDelegate {
         chromeDelegate?.omniBar.becomeFirstResponder()
     }
 
-}
-
-fileprivate extension UIDevice {
-    
-    // see https://static1.squarespace.com/static/51adfbd9e4b095d664d9b869/t/5a577ff4e4966b1f7d784921/1515683829075/Matrix+16by9-8k.pdf
-    // A8 and lower are considered slow
-    // Anything not in this list is excluded by OS version or supported implicitly
-    static let slowDevices = [
-
-        DeviceType.iPadMini4.displayName,
-        DeviceType.iPodTouch6G.displayName,
-        DeviceType.iPadAir2.displayName,
-        DeviceType.iPhone6Plus.displayName,
-        DeviceType.iPhone6.displayName,
-        DeviceType.iPadMini3.displayName,
-//         // DeviceType.iPadMini2.displayName, Covered by iPadMini3 and iPadMini it seems
-        DeviceType.iPadAir.displayName,
-        DeviceType.iPhone5S.displayName,
-        DeviceType.iPhone5C.displayName,
-        DeviceType.iPad.displayName,
-        DeviceType.iPhone5.displayName,
-        DeviceType.iPadMini.displayName,
-        DeviceType.iPodTouch5G.displayName,
-        DeviceType.iPad.displayName,
-        DeviceType.iPhone4S.displayName,
-        DeviceType.iPad2.displayName
-        
-    ]
-    
-    func isSlow() -> Bool {
-        return UIDevice.slowDevices.contains(deviceType.displayName)
-    }
-    
 }
 

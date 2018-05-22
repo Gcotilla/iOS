@@ -1,3 +1,3 @@
-cd JSTests
-phantomjs run.js
+cd JSTests/content-blocking
+karma start
 exit $?

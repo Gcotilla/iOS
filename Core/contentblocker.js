@@ -67,6 +67,7 @@ var duckduckgoContentBlocking = function() {
 			// FROM: https://stackoverflow.com/a/7739035/73479
 			// FIX: Better capturing of top level URL so that trackers in embedded documents are not considered first party
 			var url = window.location != window.parent.location ? new URL(document.referrer) : document.location
+			console.log("topLevelURL:", url)
 			return url
 		} catch(error) {
 			console.log(error)
@@ -143,6 +144,10 @@ var duckduckgoContentBlocking = function() {
 
 	// private
 	function isAssociatedFirstPartyDomain(trackerUrl) {
+		if (trackerUrl.startsWith("/") && !trackerUrl.startsWith("//")) {
+			return true
+		}
+
 		var urlToCheck = toURL(trackerUrl, topLevelUrl.protocol)
 		if (urlToCheck == null) {
 			return false
